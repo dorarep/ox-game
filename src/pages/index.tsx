@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { useState } from 'react';
 
 const Wrapper = styled.div`
   display: flex;
@@ -46,18 +47,20 @@ const Grid = styled.div`
 `;
 
 export default function Home() {
+  const [board, setBoard] = useState<number[][]>([[0, 1, 0], [0, 2, 0], [0, 0, 0]]);
+  const onClick = (x, y) => {
+    board[x][y] = 1;
+    setBoard([ ...board ]);
+  };
+
   return (
     <Wrapper>
       <Board>
-        <Grid />
-        <Circle />
-        <Grid />
-        <Grid />
-        <Circle white />
-        <Circle white />
-        <Grid />
-        <Grid />
-        <Grid />
+        {board.map((rows, x) => rows.map((grid, y) => {
+          if (grid === 0) { return <Grid key={y + x * 3} onClick={() => onClick(x, y)} />; }
+          if (grid === 1) { return <Circle key={y + x * 3} />; }
+          return <Circle key={y + x * 3} white />;
+        }))}
       </Board>
     </Wrapper>
   )
